@@ -58,7 +58,7 @@ async function sendQuestionToChatbot(conversationId, question) {
     }
 }
 
-
+// Assuming addKeyword and flowDynamic are defined elsewhere in your code
 const flow = addKeyword([REGEX_ANY_CHARACTER], { regex: true }) // Wrap the regex in an array
     .addAction(async (ctx, { flowDynamic }) => {
         const question = ctx.body; // Get the user's input directly from ctx.body
@@ -68,12 +68,18 @@ const flow = addKeyword([REGEX_ANY_CHARACTER], { regex: true }) // Wrap the rege
         try {
             const response = await sendQuestionToChatbot(conversationId, question);
             const outputMessage = response.output; // Access the 'output' key from the response
-            await flowDynamic(`Response from chatbot: ${JSON.stringify(outputMessage)}`); // Send the API response back to the user
+            
+            // Check if outputMessage is defined before trying to use it
+            if (outputMessage) {
+                await flowDynamic(`Response from chatbot: ${JSON.stringify(outputMessage)}`); // Send the API response back to the user
+            } else {
+                await flowDynamic('No response received from the chatbot.');
+            }
         } catch (error) {
+            console.error('Error in flow action:', error); // Log the error
             await flowDynamic('There was an error sending your question. Please try again.');
         }
     });
-
 // const welcomeFlow = addKeyword(REGEX_GMAIL_EMAIL, 
 //     { regex: true })
 //     .addAnswer(`🙌 Hello welcome to this *Chatbot*`)
