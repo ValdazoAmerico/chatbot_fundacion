@@ -71,7 +71,7 @@ const flow = addKeyword([REGEX_ANY_CHARACTER], { regex: true }) // Wrap the rege
             
             // Check if outputMessage is defined before trying to use it
             if (outputMessage) {
-                await flowDynamic(`${JSON.stringify(outputMessage).replace(/\"/g, '').replace(/\n+/g, ' ')}`);
+                await flowDynamic(`${JSON.stringify(outputMessage).replace(/\\n/g, ' ').replace(/\"/g, '')}`);
             } else {
                 await flowDynamic('No response received from the chatbot.');
             }
